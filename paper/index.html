@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Search Intelligence for Content Refresh: Ranking Content by Material Decline Opportunity — FlyRank ML Capstone.">
+  <meta name="theme-color" content="#0b0f14">
+  <title>Search Intelligence for Content Refresh | FlyRank ML Capstone</title>
+  <style>
+    :root{
+      --bg:#080b0f;--panel:#0f141b;--panel2:#121922;--text:#f4f7fb;--muted:#a8b2bf;
+      --line:#202a35;--accent:#ff7a18;--accent2:#ff9b49;--ok:#62d39a;--blue:#6ea8ff;
+      --shadow:0 18px 60px rgba(0,0,0,.28);--radius:22px;--max:1180px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:radial-gradient(900px 500px at 80% -10%,rgba(255,122,24,.12),transparent 55%),radial-gradient(900px 600px at -10% 20%,rgba(110,168,255,.08),transparent 55%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.65}
+    a{color:inherit;text-decoration:none}
+    .wrap{width:min(100% - 40px,var(--max));margin-inline:auto}
+    .nav{position:sticky;top:0;z-index:20;background:rgba(8,11,15,.82);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.05)}
+    .navin{height:72px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+    .brand{font-weight:800;letter-spacing:-.03em;display:flex;align-items:center;gap:10px}
+    .brandmark{width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#ffb36d);display:grid;place-items:center;color:#121212;font-size:14px;font-weight:900}
+    .navlinks{display:flex;gap:18px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+    .navlinks a{font-size:13px;color:var(--muted)}
+    .navlinks a:hover{color:var(--text)}
+    .hero{padding:86px 0 52px}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 11px;border:1px solid rgba(255,122,24,.25);background:rgba(255,122,24,.08);color:#ffc18f;border-radius:999px;font-size:12px;font-weight:750;text-transform:uppercase;letter-spacing:.12em}
+    h1{font-size:clamp(42px,6vw,76px);line-height:1.01;letter-spacing:-.055em;margin:20px 0 20px;max-width:980px}
+    .hero p{font-size:18px;color:var(--muted);max-width:850px;margin:0}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border-radius:12px;border:1px solid var(--line);background:#111820;font-weight:750;font-size:14px}
+    .btn.primary{background:var(--accent);color:#111;border-color:var(--accent)}
+    .btn:hover{transform:translateY(-1px)}
+    .meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:28px;color:var(--muted);font-size:13px}
+    .dot{width:6px;height:6px;background:var(--accent);border-radius:50%;display:inline-block;margin-right:7px}
+    section{padding:36px 0}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:22px}
+    .kicker{color:var(--accent2);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.13em}
+    h2{font-size:32px;line-height:1.12;letter-spacing:-.035em;margin:6px 0 0}
+    h3{font-size:20px;line-height:1.25;margin:0 0 10px;letter-spacing:-.02em}
+    .lead{color:var(--muted);max-width:820px}
+    .grid{display:grid;gap:16px}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    .grid-3{grid-template-columns:repeat(3,1fr)}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .card{background:linear-gradient(180deg,rgba(18,25,34,.94),rgba(13,18,24,.94));border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+    .metric .label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.11em;font-weight:750}
+    .metric .value{font-size:35px;font-weight:850;letter-spacing:-.04em;margin-top:8px}
+    .metric .sub{font-size:12px;color:var(--muted);margin-top:4px}
+    .callout{border-left:3px solid var(--accent);padding:6px 0 6px 16px;color:#e9eef4}
+    .callout strong{color:#fff}
+    .pill{display:inline-block;padding:4px 9px;border-radius:999px;background:#151e28;border:1px solid #273443;color:#cbd5df;font-size:12px;margin:3px 5px 3px 0}
+    .pill.orange{background:rgba(255,122,24,.08);border-color:rgba(255,122,24,.25);color:#ffc18f}
+    .flow{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+    .flow .step{position:relative;padding:18px;border:1px solid var(--line);border-radius:16px;background:#0d131a}
+    .flow .num{color:var(--accent);font-weight:900;font-size:12px}
+    .flow .txt{font-weight:750;margin-top:7px;font-size:14px}
+    .tablewrap{overflow:auto;border:1px solid var(--line);border-radius:18px}
+    table{width:100%;border-collapse:collapse;min-width:720px;background:#0d131a}
+    th,td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+    th:first-child,td:first-child{text-align:left}
+    th{font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:#97a3b1;background:#111820}
+    td{font-size:14px}
+    tr:last-child td{border-bottom:0}
+    .best{color:#ffb06e;font-weight:800}
+    .barlist{display:grid;gap:13px}
+    .barrow{display:grid;grid-template-columns:280px 1fr 60px;gap:12px;align-items:center}
+    .barlabel{font-size:13px;color:#d7dee6;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .bar{height:9px;background:#1c2530;border-radius:999px;overflow:hidden}
+    .bar>span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent),#ffb067)}
+    .barval{font-size:12px;color:var(--muted);text-align:right}
+    .tiergrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .tier{padding:22px;border-radius:20px;border:1px solid var(--line);background:#0d131a}
+    .tier .rank{font-size:12px;color:var(--accent2);text-transform:uppercase;font-weight:800;letter-spacing:.1em}
+    .tier .big{font-size:38px;font-weight:850;letter-spacing:-.04em;margin-top:6px}
+    .tier .rate{font-size:15px;color:#e3e9ef;margin-top:2px}
+    .tier p{color:var(--muted);font-size:13px}
+    .tier.high{border-color:rgba(255,122,24,.36);box-shadow:0 0 0 1px rgba(255,122,24,.06) inset}
+    .tier.med{border-color:rgba(255,176,103,.2)}
+    .tier.low{border-color:rgba(110,168,255,.16)}
+    .chart{display:grid;gap:12px}
+    .chartrow{display:grid;grid-template-columns:160px 1fr 64px;align-items:center;gap:12px}
+    .chartbar{height:32px;background:#19212a;border-radius:10px;overflow:hidden}
+    .chartbar span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#ffb067);border-radius:10px}
+    .chartrow small{color:var(--muted);font-size:12px}
+    .chartnum{font-variant-numeric:tabular-nums;text-align:right;font-weight:800}
+    ul{margin:10px 0 0 18px;padding:0;color:var(--muted)}
+    li{margin:7px 0}
+    .quote{font-size:20px;line-height:1.45;color:#f3f5f8;margin:0}
+    .note{font-size:12px;color:#8f9baa}
+    .footer{padding:50px 0 70px;border-top:1px solid var(--line);margin-top:30px}
+    .footergrid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:18px}
+    .footlabel{font-size:11px;color:#778291;text-transform:uppercase;letter-spacing:.12em;font-weight:800}
+    .footvalue{margin-top:7px;color:#d8e0e9;word-break:break-word}
+    .muted{color:var(--muted)}
+    code{background:#111820;border:1px solid #212c38;padding:2px 6px;border-radius:7px;font-size:.9em;color:#ffd2af}
+    @media(max-width:960px){.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3,.tiergrid{grid-template-columns:1fr}.flow{grid-template-columns:repeat(2,1fr)}.barrow{grid-template-columns:210px 1fr 56px}.footergrid{grid-template-columns:1fr 1fr}}
+    @media(max-width:650px){.wrap{width:min(100% - 24px,var(--max))}.navin{height:auto;padding:13px 0;align-items:flex-start}.navlinks{display:none}.hero{padding-top:58px}.hero p{font-size:16px}.grid-4,.grid-2{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.barrow{grid-template-columns:1fr}.chartrow{grid-template-columns:1fr 1fr 64px}.chartrow small{grid-column:1/-1}.footergrid{grid-template-columns:1fr}.section-head{display:block}}
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap navin">
+      <a class="brand" href="#top"><span class="brandmark">FR</span><span>FlyRank · ML Capstone</span></a>
+      <nav class="navlinks" aria-label="Section navigation">
+        <a href="#abstract">Abstract</a><a href="#method">Method</a><a href="#results">Results</a><a href="#ranking">Ranking</a><a href="#recommendations">Recommendations</a><a href="#limitations">Limitations</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <span class="eyebrow">Machine Learning · Refresh / Content Opportunity Scoring</span>
+        <h1>Search Intelligence for Content Refresh</h1>
+        <p>Ranking content by material decline opportunity using historical search-performance signals, content characteristics, and leakage-aware validation.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#results">Explore results</a>
+          <a class="btn" href="#repro">Reproducibility</a>
+        </div>
+        <div class="meta">
+          <span><span class="dot"></span>FlyRank ML Internship dataset</span>
+          <span><span class="dot"></span><code>decline_recovery</code></span>
+          <span><span class="dot"></span>56,253 observations</span>
+          <span><span class="dot"></span>13 model inputs</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="abstract">
+      <div class="wrap">
+        <div class="section-head"><div><div class="kicker">Abstract</div><h2>From raw signals to a prioritized review queue</h2></div></div>
+        <div class="grid grid-2">
+          <div class="card"><p class="quote">The project develops a machine-learning workflow that ranks content items for potential refresh review. Random Forest and HistGradientBoosting were evaluated alongside a most-frequent baseline using a held-out, client-group-aware test split. Random Forest achieved an F1-score of <strong>0.5734</strong> and ROC-AUC of <strong>0.6608</strong>, while HistGradientBoosting achieved the highest ROC-AUC at <strong>0.6717</strong>. The Random Forest ranking concentrated observed material decline into a High Opportunity tier with a <strong>74.38%</strong> decline rate versus <strong>46.24%</strong> in the Lower Opportunity tier. That corresponds to a <strong>1.61×</strong> relative lift and a <strong>28.14 percentage-point</strong> difference.</p></div>
+          <div class="card"><div class="kicker">Primary research question</div><h3>Can historical search and engagement signals be used to rank content pages for future refresh review?</h3><div class="callout" style="margin-top:18px"><strong>Decision supported:</strong> prioritize investigation and editorial triage; do not treat the model as a causal or automatic content-refresh decision system.</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <div class="grid grid-4">
+          <div class="card metric"><div class="label">Dataset</div><div class="value">56,253</div><div class="sub">content-level observations</div></div>
+          <div class="card metric"><div class="label">Final inputs</div><div class="value">13</div><div class="sub">modeling features</div></div>
+          <div class="card metric"><div class="label">RF F1</div><div class="value">0.5734</div><div class="sub">strongest evaluated F1</div></div>
+          <div class="card metric"><div class="label">Ranking lift</div><div class="value">1.61×</div><div class="sub">High vs Lower Opportunity</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="problem">
+      <div class="wrap">
+        <div class="section-head"><div><div class="kicker">01 · Problem</div><h2>Turn search-performance change into a review priority</h2></div></div>
+        <div class="grid grid-2">
+          <div class="card"><h3>Why this matters</h3><p class="lead">Large content collections make manual review expensive. The project asks whether historical performance and static content signals can identify a smaller group that deserves earlier investigation.</p></div>
+          <div class="card"><h3>What the system does</h3><p class="lead">It predicts a material-decline outcome, scores held-out observations with the Random Forest model, and turns those scores into percentile-based review tiers with reason codes and an action playbook.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="data">
+      <div class="wrap">
+        <div class="section-head"><div><div class="kicker">02 · Data</div><h2>Public-safe, leakage-aware analytical snapshot</h2></div></div>
+        <div class="grid grid-3">
+          <div class="card"><h3>Dataset</h3><p><code>FlyRank/internship-lanes</code><br><code>decline_recovery</code><br><span class="muted">Training split used for analysis; 56,253 observations.</span></p></div>
+          <div class="card"><h3>Final evaluation</h3><p><strong>48,219</strong> training rows<br><strong>8,034</strong> held-out test rows<br><span class="muted">Group-aware split by client identifier.</span></p></div>
+          <div class="card"><h3>Public-safe framing</h3><p class="muted">The website intentionally excludes client names, private queries, credentials, raw exports, and identifying URL/content values.</p></div>
+        </div>
+        <div class="card" style="margin-top:16px"><div class="kicker">Prediction target</div><p>Material decline is defined from the change in impressions between the latest 30-day period and the preceding 30-day period. A material decline is an impression change of <strong>-60% or worse</strong>. Outcome-period measurements are excluded from the model inputs.</p><p class="note">The original <code>is_declining</code> field is constant (<code>True</code>) across the inspected lane and is therefore not used as the final target.</p></div>
+      </div>
+    </section>
+
+    <section id="method">
+      <div class="wrap">
+        <div class="section-head"><div><div class="kicker">03 · Methodology</div><h2>A repeatable five-stage workflow</h2></div></div>
+        <div class="flow">
+          <div class="step"><div class="num">01</div><div class="txt">Inspect & validate</div></div>
+          <div class="step"><div class="num">02</div><div class="txt">Construct target</div></div>
+          <div class="step"><div class="num">03</div><div class="txt">Build leakage-safe inputs</div></div>
+          <div class="step"><div class="num">04</div><div class="txt">Train & evaluate</div></div>
+          <div class="step"><div class="num">05</div><div class="txt">Rank & prioritize</div></div>
+        </div>
+        <div class="grid grid-2" style="margin-top:16px">
+          <div class="card"><h3>Final model inputs</h3><div>
+            <span class="pill">impressions_prev_30d</span><span class="pill">clicks_prev_30d</span><span class="pill">sessions_prev_30d</span><span class="pill">keyword_char_count</span><span class="pill">keyword_token_count</span><span class="pill">public_url_char_count</span><span class="pill">public_url_path_depth</span><span class="pill">content_title_char_count</span><span class="pill">content_title_token_count</span><span class="pill">content_age_days</span><span class="pill">client_has_gsc</span><span class="pill">client_has_ga4</span><span class="pill">content_type</span>
+          </div></div>
+          <div class="card"><h3>Leakage prevention</h3><ul><li>Held-out test split uses client-group separation.</li><li>Final validation: <strong>0 overlapping clients</strong>.</li><li>Known outcome-period / derived decision fields were excluded.</li><li>Final feature audit reported <strong>0 known leaking features</strong>.</li></ul></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="results">
+      <div class="wrap">
+        <div class="section-head"><div><div class="kicker">04 · Results</div><h2>Model performance on the same held-out split</h2></div></div>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Model</th><th>Accuracy</th><th>Precision</th><th>Recall</th><th>F1</th><th>ROC-AUC</th></tr></thead>
+            <tbody>
+              <tr><td>Most-Frequent Baseline</td><td>0.4765</td><td>0.0000</td><td>0.0000</td><td>0.0000</td><td>—</td></tr>
+              <tr><td>Logistic Regression</td><td>0.5102</td><td>0.6804</td><td>0.1215</td><td>0.2062</td><td>0.5336</td></tr>
+              <tr><td class="best">Random Forest</td><td class="best">0.6049</td><td>0.6596</td><td class="best">0.5071</td><td class="best">0.5734</td><td>0.6608</td></tr>
+              <tr><td>HistGradientBoosting</td><td>0.6034</td><td>0.6926</td><td>0.4360</td><td>0.5352</td><td class="best">0.6717</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="grid grid-2" style="margin-top:16px">
+          <div class="card">
+            <div class="kicker">F1 score</div>
+            <div class="chart" style="margin-top:14px">
+              <div class="chartrow"><small>Logistic</small><div class="chartbar"><span style="width:20.62%"></span></div><div class="chartnum">0.2062</div></div>
+              <div class="chartrow"><small>Random Forest</small><div class="chartbar"><span style="width:57.34%"></span></div><div class="chartnum">0.5734</div></div>
+              <div class="chartrow"><small>HistGradientBoosting</small><div class="chartbar"><span style="width:53.52%"></span></div><div class="chartnum">0.5352</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="kicker">ROC-AUC</div>
+            <div class="chart" style="margin-top:14px">
+              <div class="chartrow"><small>Logistic</small><div class="chartbar"><span style="width:53.36%"></span></div><div class="chartnum">0.5336</div></div>
+              <div class="chartrow"><small>Random Forest</small><div class="chartbar"><span style="width:66.08%"></span></div><div class="chartnum">0.6608</div></div>
+              <div class="chartrow"><small>HistGradientBoosting</small><div class="chartbar"><span style="width:67.17%"></span></div><div class="chartnum">0.6717</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px"><div class="callout"><strong>Model choice:</strong> Random Forest is the operational ranking model because it achieved the strongest F1-score and was used to generate the opportunity ranking. HistGradientBoosting remains the ROC-AUC leader and an important comparative result.</div></div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="wrap">
+        <div class="section-head"><div><div class="kicker">05 · Feature signal</div><h2>What the Random Forest used most</h2></div></div>
+        <div class="grid grid-2">
+          <div class="card">
+            <div class="barlist">
+              <div class="barrow"><div class="barlabel">impressions_prev_30d</div><div class="bar"><span style="width:100%"></span></div><div class="barval">0.1911</div></div>
+              <div class="barrow"><div class="barlabel">content_age_days</div><div class="bar"><span style="width:97.6%"></span></div><div class="barval">0.1865</div></div>
+              <div class="barrow"><div class="barlabel">clicks_prev_30d</div><div class="bar"><span style="width:80.4%"></span></div><div class="barval">0.1537</div></div>
+              <div class="barrow"><div class="barlabel">public_url_path_depth</div><div class="bar"><span style="width:49.8%"></span></div><div class="barval">0.0951</div></div>
+              <div class="barrow"><div class="barlabel">sessions_prev_30d</div><div class="bar"><span style="width:48.2%"></span></div><div class="barval">0.0921</div></div>
+              <div class="barrow"><div class="barlabel">public_url_char_count</div><div class="bar"><span style="width:40.1%"></span></div><div class="barval">0.0767</div></div>
+              <div class="barrow"><div class="barlabel">content_title_char_count</div><div class="bar"><span style="width:31.6%"></span></div><div class="barval">0.0603</div></div>
+              <div class="barrow"><div class="barlabel">keyword_char_count</div><div class="bar"><span style="width:28.3%"></span></div><div class="barval">0.0541</div></div>
+            </div>
+          </div>
+          <div class="card"><h3>Interpretation</h3><p class="lead">Historical search visibility and engagement dominate the importance ranking, followed by content age and structural characteristics. The constant <code>client_has_gsc</code> input contributes zero model importance.</p><p class="note">Feature importance is model-specific and indicates association with predictions; it is not causal evidence.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ranking">
+      <div class="wrap">
+        <div class="section-head"><div><div class="kicker">06 · Opportunity ranking</div><h2>A smaller queue with higher observed decline prevalence</h2></div></div>
+        <div class="tiergrid">
+          <div class="tier high"><div class="rank">High Opportunity</div><div class="big">804</div><div class="rate">74.38% observed decline</div><p>Immediate review. The model concentrates the highest observed decline prevalence in this group.</p></div>
+          <div class="tier med"><div class="rank">Medium Opportunity</div><div class="big">1,205</div><div class="rate">68.22% observed decline</div><p>Scheduled review. Investigate performance and content signals before prioritizing intervention.</p></div>
+          <div class="tier low"><div class="rank">Lower Opportunity</div><div class="big">6,025</div><div class="rate">46.24% observed decline</div><p>Monitor. Keep under observation and reassess when new evidence indicates increased risk.</p></div>
+        </div>
+        <div class="card" style="margin-top:16px">
+          <div class="kicker">Observed decline rate</div>
+          <div class="chart" style="margin-top:15px">
+            <div class="chartrow"><small>High Opportunity</small><div class="chartbar"><span style="width:74.38%"></span></div><div class="chartnum">74.38%</div></div>
+            <div class="chartrow"><small>Medium Opportunity</small><div class="chartbar"><span style="width:68.22%"></span></div><div class="chartnum">68.22%</div></div>
+            <div class="chartrow"><small>Lower Opportunity</small><div class="chartbar"><span style="width:46.24%"></span></div><div class="chartnum">46.24%</div></div>
+          </div>
+          <div class="grid grid-2" style="margin-top:18px">
+            <div><div class="kicker">Relative lift</div><div class="metric value" style="margin-top:4px">1.61×</div><div class="sub">High vs Lower Opportunity</div></div>
+            <div><div class="kicker">Absolute difference</div><div class="metric value" style="margin-top:4px">28.14 pp</div><div class="sub">percentage-point difference in observed decline rate</div></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:16px"><p class="callout"><strong>Interpretation:</strong> the ranking can concentrate observed decline cases into a smaller review queue. It does not guarantee future decline and does not show that a content refresh will cause performance improvement.</p></div>
+      </div>
+    </section>
+
+    <section id="recommendations">
+      <div class="wrap">
+        <div class="section-head"><div><div class="kicker">07 · Reason codes & actions</div><h2>Turn score into an explainable review playbook</h2></div></div>
+        <div class="grid grid-2">
+          <div class="card"><h3>Reason codes</h3><p class="muted">Example supporting signals attached to the ranked queue:</p><div style="margin-top:12px"><span class="pill orange">LOW_HISTORICAL_IMPRESSIONS</span><span class="pill orange">LOW_HISTORICAL_CLICKS</span><span class="pill orange">LOW_HISTORICAL_SESSIONS</span><span class="pill">OLDER_CONTENT</span><span class="pill">DEEP_URL_STRUCTURE</span><span class="pill">MODEL_SCORE_DRIVEN</span></div><p class="note" style="margin-top:12px">Reason codes are prioritization context, not causal explanations.</p></div>
+          <div class="card"><h3>Action playbook</h3><div style="display:grid;gap:15px;margin-top:12px">
+            <div><strong>High · Immediate review</strong><div class="muted">Review recent search-performance changes, relevance, freshness, title/keyword alignment, and potential technical or structural issues.</div></div>
+            <div><strong>Medium · Scheduled review</strong><div class="muted">Review trends, quality gaps, and comparable content; intervene when additional evidence supports it.</div></div>
+            <div><strong>Lower · Monitor</strong><div class="muted">Continue monitoring and avoid unnecessary changes unless new evidence increases the priority.</div></div>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="limitations">
+      <div class="wrap">
+        <div class="section-head"><div><div class="kicker">08 · Limitations</div><h2>Honest framing matters as much as model score</h2></div></div>
+        <div class="grid grid-3">
+          <div class="card"><h3>Dataset limitation</h3><p class="muted">Results describe the available anonymized snapshot and should not automatically be generalized to other search environments.</p></div>
+          <div class="card"><h3>Prediction limitation</h3><p class="muted">Model performance is moderate rather than perfect; incorrect classifications remain.</p></div>
+          <div class="card"><h3>Distribution limitation</h3><p class="muted">Future changes in content, demand, user behavior, or search systems can alter model performance.</p></div>
+          <div class="card"><h3>Causal limitation</h3><p class="muted">Feature importance and predicted risk do not establish that changing a feature will improve search performance.</p></div>
+          <div class="card"><h3>Ranking limitation</h3><p class="muted">An opportunity score identifies items for review; it does not guarantee future decline or refresh success.</p></div>
+          <div class="card"><h3>Correct interpretation</h3><p class="callout"><strong>Model-based content-review prioritization and decision support.</strong></p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="repro">
+      <div class="wrap">
+        <div class="section-head"><div><div class="kicker">09 · Reproducibility</div><h2>Everything needed to reproduce the analysis</h2></div></div>
+        <div class="grid grid-2">
+          <div class="card"><h3>Workflow recorded in the capstone notebook</h3><ul><li>Data loading and inspection</li><li>Target construction</li><li>Feature engineering</li><li>Leakage audits</li><li>Group-aware train/test separation</li><li>Model training and evaluation</li><li>Opportunity scoring and tiering</li><li>Reason-code and action-playbook generation</li><li>Final validation</li></ul></div>
+          <div class="card"><h3>Public links</h3><p class="muted">Add the final public repository and notebook links before deployment.</p><div class="card" style="background:#0b1016;margin-top:12px"><div class="footlabel">GitHub repository</div><div class="footvalue">PLACEHOLDER_REPOSITORY_URL</div></div><div class="card" style="background:#0b1016;margin-top:10px"><div class="footlabel">Notebook</div><div class="footvalue">PLACEHOLDER_NOTEBOOK_URL</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ack">
+      <div class="wrap">
+        <div class="card">
+          <div class="kicker">10 · Acknowledgments & data credit</div>
+          <h2 style="font-size:26px">Built on the FlyRank ML Internship dataset.</h2>
+          <p class="lead">This project was completed as part of the FlyRank AI Machine Learning Internship Capstone.</p>
+          <a class="btn" href="https://flyrank.ai" target="_blank" rel="noopener">FlyRank AI ↗</a>
+          <p class="note" style="margin-top:14px">Public output intentionally excludes client names, private queries, credentials, raw client-level exports, and identifying URL/content values.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footergrid">
+      <div><div class="footlabel">Project</div><div class="footvalue">Search Intelligence for Content Refresh</div><div class="muted" style="margin-top:5px">Refresh / Content Opportunity Scoring · Machine Learning Track</div></div>
+      <div><div class="footlabel">Final evidence</div><div class="footvalue">RF F1 0.5734 · RF ROC-AUC 0.6608 · HGB ROC-AUC 0.6717</div></div>
+      <div><div class="footlabel">Research stance</div><div class="footvalue">Decision support, not causal inference</div></div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',()=>{}));
+  </script>
+</body>
+</html>
